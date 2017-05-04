@@ -8,4 +8,5 @@ Display GitHub Users programming languages
 ## Usage
 
 Open index.html
+<br/>
 Open indexTest.html in order to test using QUnit
