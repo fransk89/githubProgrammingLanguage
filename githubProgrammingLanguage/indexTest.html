@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>GitHub Programming Language</title>
+	
+	    <!-- Bootstrap core CSS, jQuery -->
+	    <link href="https://bootswatch.com/simplex/bootstrap.min.css" rel="stylesheet">
+	   	<script src="https://code.jquery.com/jquery-3.1.1.js" ></script>
+	    
+	    <!-- QUnit -->    
+		<script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+   		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/qunit/qunit-1.11.0.css">
+		
+	    <!-- Internal Javascript -->       
+	    <script src="js/gitHub.js"></script>
+	    <script src="js/view.js"></script>
+		<script src="js/test.js"></script>
+		
+		
+  	</head>
+
+  	<body>
+		<div class="container">
+	      	<div class="searchContainer">
+		        <h1>Search Users Programming Language </h1>
+		       	<p class="lead" >Enter a username to fetch the best guess of the GitHub user's favourite programming language</p>
+		        <input type="text" id="searchUser" class="form-control" placeholder="Github Username...">
+	    	</div>
+	      	<br>
+	      	<div id="profile"></div>
+	      	<div id="repos"> </div>
+		</div>
+		
+		<!-- QUnit box --> 
+		<div id="qunit"></div>
+	    <div id="qunit-fixture"></div> 
+ 	</body>
+</html>
