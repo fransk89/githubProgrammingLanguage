@@ -1,6 +1,6 @@
-# Github Finder
+# Search GitHub Users Programming Languages
 
-Searches Github.com user profiles and displays profile info and the latest repositories
+Display GitHub Users programming languages
 
 ### Version
 1.0.0
@@ -8,3 +8,4 @@ Searches Github.com user profiles and displays profile info and the latest repos
 ## Usage
 
 Open index.html
+Open indexTest.html in order to test using QUnit
