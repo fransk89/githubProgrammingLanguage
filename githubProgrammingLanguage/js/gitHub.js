@@ -1,81 +1,94 @@
-// CONSTANTS
-var client_id_value = 'b71fc0970f52ba87a693';
-var client_secret_value = '8fbaa11c252f2f52949813dde24e9c3c9aed4830';
+//	CONSTANTS
+var CLIENT_ID_VALUE = 'b71fc0970f52ba87a693';
+var CLIENT_SECRET_VALUE = '8fbaa11c252f2f52949813dde24e9c3c9aed4830';
 
 $(document).ready(function (){
 	
 	$('#searchUser').on('keyup', function (e){
-		// Get username from input box
+		//	Get username from input box
 		var username = e.target.value;
 
-		// Make request to Github using username to fetch user details
-		$.ajax({
-			url:'https://api.github.com/users/'+username,
+		//	Get User using username
+		var myUser = new User(username);
+		myUser.fire();
+	});
+});
+
+//	Fetch User Info
+var User = function (username) {
+	
+	this.fire = function () {
+		// Make request to Github using username to fetch user info
+		return $.ajax({
+			url:'https://api.github.com/users/' + username,
 			data:{
-				client_id: client_id_value,
-				client_secret: client_secret_value
+				client_id: CLIENT_ID_VALUE,
+				client_secret: CLIENT_SECRET_VALUE
 			}
 		})
 		.done(function (user){
-			// Make request to Github using username to fetch repository details
-			$.ajax({
-			      url:'https://api.github.com/users/'+username+'/repos',
-			      data:{
-			    	  client_id: client_id_value,
-			    	  client_secret: client_secret_value,
-			    	  sort: 'created: asc',
-			    	  per_page: 6
-			      }
-		    })
-		    .done(function(repos) {
-		    	// Show user name in the screen
-		    	showName(user.name);
-		    	// Show programming languages used by the user in the screen
-			    showLanguages(repos);
-			})
-			.fail(function ( jqXHR, textStatus) {
-				manageError(jqXHR, textStatus);
-			});
+			// Show user Name
+	    	showName(user.name);
+			// Make request to get repositories info 
+			var myRepos = new Repos(username);
+			myRepos.fire();
 		})
 		.fail(function ( jqXHR, textStatus ) {
 			manageError(jqXHR, textStatus);
 		});
-	});
-});
+    };
+};
 
-//	We manage the different errors using Github Api
+//	Fetch Repositories info
+var Repos =	function (username) {
+			
+	this.fire = function () {
+		// Make request to Github using username to fetch repositories details   
+		return $.ajax({
+			url:'https://api.github.com/users/' + username + '/repos',
+			data:{
+		    	  client_id: CLIENT_ID_VALUE,
+		    	  client_secret: CLIENT_SECRET_VALUE,
+		    	  sort: 'created: asc',
+		    	  per_page: 6
+			}
+		})
+	    .done(function(repos) {
+	    	// Show programming languages used by the user
+		    showLanguages(repos);
+		})
+		.fail(function ( jqXHR, textStatus) {
+			manageError(jqXHR, textStatus);
+		});
+    };
+};
+
+
+//	We manage Github Api error response
 function manageError (jqXHR, textStatus) {
 	 
-	var response = "";
-	
+	var errorMessage = "";
 	if (jqXHR != null) {
-		
 		if (jqXHR.status == 0) {
-			alert('Not connect: Verify Network.');
-		    response = 'Not connect: Verify Network.';
-		  } else if (jqXHR.status == 404) {
-		    alert('Requested page not found [404].');
-		    response = 'Requested page not found [404].';
-		  } else if (jqXHR.status == 500) {
-		    alert('Internal Server Error [500].');
-		    response = 'Internal Server Error [500].';
-		  }
-
+			errorMessage = 'Not connect: Verify Network.';
+		} else if (jqXHR.status == 404) {
+			errorMessage = 'Requested page not found [404].';
+		} else if (jqXHR.status == 500) {
+			errorMessage = 'Internal Server Error [500].';
+		}
 	} else {
 		
 		if (textStatus == 'parsererror') {
-		    alert('Requested JSON parse failed.');
-		    response = 'Requested JSON parse failed.';
-		  } else if (textStatus == 'timeout') {
-		    alert('Time out error.');
-		    response = 'Time out error.';
-		  } else if (textStatus == 'abort') {
-		    alert('Ajax request aborted.');
-		    response = 'Ajax request aborted.';
-		  } else {
-		    alert('Uncaught Error.');
-		    response = 'Uncaught Error.';
-		  }
+			errorMessage = 'Requested JSON parse failed.';
+		} else if (textStatus == 'timeout') {
+			errorMessage = 'Time out error.';
+		} else if (textStatus == 'abort') {
+			errorMessage = 'Ajax request aborted.';
+		} else {
+			errorMessage = 'Uncaught Error.';
+		}
 	}
-	return response;
+	showError (errorMessage);
+	
+	return errorMessage;
 }

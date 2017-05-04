@@ -44,3 +44,16 @@ function showName (name) {
 	    <h3 class="page-header">Programming Languages</h3>
 	`);
 }
+
+//Show error message in the screen
+function showError (errorMessage) {
+	$('#repos').empty();
+	$('#profile').html(`
+		<div class="panel panel-default">
+			<div class="panel-heading">
+	        	<h3 class="panel-title" style="color: red">${errorMessage}</h3>
+	        </div>
+	    </div>
+	    
+	`);
+}

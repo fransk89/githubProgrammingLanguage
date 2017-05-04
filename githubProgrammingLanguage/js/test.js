@@ -1,4 +1,44 @@
-test("Errors Management", function () {
+
+var TEST_USER = 'fransk89'
+
+//	Test Github usernames
+QUnit.asyncTest("Testing GitHub Username", 2, function() {
+   
+	// The number of async calls in this test
+	var countDown = createAsyncCounter(2); 
+     	
+	// Make request to Github using Testuser
+    testUser = new User(TEST_USER);
+    testUser.fire().done(function(user) {
+       equal(user.login, TEST_USER, "Test User 'fransk89' exists in GitHub");
+    })
+    .always(countDown);
+    
+    // Make request to Github using empty
+    testUser = new User('');
+    testUser.fire().fail(function ( jqXHR, textStatus ) {
+    	equal(null, null, "User '' doesn´t exist");
+    })
+    .always(countDown);
+});
+
+
+
+//	Test Github User repositories
+QUnit.asyncTest("Testing GitHub User Repositories", 1, function() {
+   
+	// The number of async calls in this test
+	var countDown = createAsyncCounter(1);
+	
+	// Make request to Github using User info
+	testRepositories = new Repos(TEST_USER);
+	testRepositories.fire().done(function(repos) {
+		equal(repos[0].language, "JavaScript", "Programming language JavaScript exists in 'fransk89' repository");
+    })
+    .always(countDown);
+});
+
+QUnit.test("Errors Management", function () {
 	
 	var jqXHR = new jqXHRAux();
 	
@@ -15,6 +55,12 @@ test("Errors Management", function () {
     equal( manageError(null,null, null), 'Uncaught Error.', 'Error message: Uncaught Error.' );
    
 });
+
+//Create a function that counts down to `start()`
+function createAsyncCounter(count) {
+    count = count || 1; // count defaults to 1
+    return function () { --count || start(); };
+}
 
 function jqXHRAux() {
 	 this.status;
